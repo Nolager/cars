@@ -12,10 +12,12 @@ spring:
       use-new-id-generator-mappings: false
     show-sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/cars_app
-    username: root
-    password: aosorio
-    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:h2:file:../../data/cars;AUTO_SERVER=TRUE
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+  h2:
+    console.enabled: true
 
 eureka:
   client:
