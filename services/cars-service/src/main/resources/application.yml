@@ -1,0 +1,31 @@
+server:
+  port: 8580
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: cars-app
+  jpa:
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: false
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/cars_app
+    username: root
+    password: aosorio
+    driver-class-name: com.mysql.jdbc.Driver
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+
+springdoc:
+  packagesToScan: cl.andres.cars.controller
+
+services:
+  model-url: http://localhost:8581/api/models
