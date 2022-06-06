@@ -27,7 +27,10 @@ public class ModelController {
         content = { @Content(mediaType = "application/json",
                 schema = @Schema(implementation = Model.class)) })
     @GetMapping
-    public ResponseEntity<List<Model>> getModels() {
+    public ResponseEntity<List<Model>> getModels() throws InterruptedException {
+
+//        Thread.sleep(3000);
+
         return ResponseEntity.ok(modelService.getModels());
     }
 }
