@@ -2,6 +2,7 @@ package cl.andres.cars.controller;
 
 import cl.andres.cars.model.Model;
 import cl.andres.cars.service.ModelService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,7 +28,12 @@ public class ModelController {
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = Model.class))})
     @GetMapping
+    @CircuitBreaker(name = "modelService", fallbackMethod = "fallbackService")
     public ResponseEntity<List<Model>> models() {
         return ResponseEntity.ok(modelService.getModels());
+    }
+
+    public ResponseEntity<String> fallbackService(Exception e) {
+        return ResponseEntity.ok("Fallback response");
     }
 }
