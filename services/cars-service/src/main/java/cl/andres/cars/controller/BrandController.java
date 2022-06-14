@@ -1,26 +1,33 @@
 package cl.andres.cars.controller;
 
+import cl.andres.cars.dto.response.GenericResponseDTO;
 import cl.andres.cars.model.Brand;
-import cl.andres.cars.service.BrandServiceImpl;
+import cl.andres.cars.service.BrandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/brands")
 public class BrandController {
 
-    @Autowired
-    private BrandServiceImpl brandService;
+    private final BrandService brandService;
+
+    public BrandController(BrandService brandService) {
+        this.brandService = brandService;
+    }
 
     @Operation(summary = "Get list of all brands")
     @ApiResponse(responseCode = "200",
@@ -28,7 +35,7 @@ public class BrandController {
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = Brand.class))})
     @GetMapping
-    public ResponseEntity<List<Brand>> brands() {
+    public ResponseEntity<GenericResponseDTO> brands() {
         return ResponseEntity.ok(brandService.getBrands());
     }
 
@@ -45,9 +52,9 @@ public class BrandController {
     })
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Brand>> oneBrand(@Parameter(description = "id of brand to be searched")
-                                                    @PathVariable Integer id) {
-        return ResponseEntity.ok(brandService.getBrand(id));
+    public ResponseEntity<GenericResponseDTO> getBrandById(@Parameter(description = "id of brand to be searched")
+                                                    @PathVariable long id) {
+        return ResponseEntity.ok(brandService.getBrandById(id));
     }
 
     @Operation(summary = "Saves a new brand")
@@ -59,7 +66,7 @@ public class BrandController {
             @ApiResponse(responseCode = "409", description = "Brand already exists")
     })
     @PostMapping
-    public ResponseEntity<String> saveBrand(
+    public ResponseEntity<GenericResponseDTO> saveBrand(
             @Parameter(description = "Brand to create. Cannot be null or empty",
                     required = true,
                     schema = @Schema(implementation = Brand.class))
@@ -74,8 +81,8 @@ public class BrandController {
             @ApiResponse(responseCode = "404", description = "Brand deleted")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBrand(@Parameter(description = "id of brand to be deleted")
-                                              @PathVariable Integer id) {
+    public ResponseEntity<GenericResponseDTO> deleteBrand(@Parameter(description = "id of brand to be deleted")
+                                              @PathVariable long id) {
         return ResponseEntity.ok(brandService.deleteBrand(id));
     }
 
@@ -86,7 +93,7 @@ public class BrandController {
             @ApiResponse(responseCode = "404", description = "Brand not found"),
             @ApiResponse(responseCode = "405", description = "Validation exception")})
     @PutMapping
-    public ResponseEntity<String> putBrand(
+    public ResponseEntity<GenericResponseDTO> putBrand(
             @Parameter(description = "Brand to create. Cannot be null or empty",
                     required = true,
                     schema = @Schema(implementation = Brand.class))

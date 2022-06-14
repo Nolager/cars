@@ -1,12 +1,12 @@
 package cl.andres.cars.service;
 
+import cl.andres.cars.dto.response.GenericResponseDTO;
 import cl.andres.cars.model.Brand;
-import java.util.Optional;
 
-interface BrandService {
-    Iterable<Brand> getBrands();
-    Optional<Brand> getBrand(Integer id);
-    String createBrand(Brand brand);
-    String deleteBrand(Integer id);
-    String updateBrand(Brand brand);
+public interface BrandService {
+    GenericResponseDTO getBrands();
+    GenericResponseDTO getBrandById(long id);
+    GenericResponseDTO createBrand(Brand brand);
+    GenericResponseDTO deleteBrand(long id);
+    GenericResponseDTO updateBrand(Brand brand);
 }
